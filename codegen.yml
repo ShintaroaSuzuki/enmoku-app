@@ -1,0 +1,22 @@
+overwrite: true
+schema: ${GRAPHQL_ENDPOINT}
+documents: "src/graphql/**/*.graphql"
+generates:
+  src/graphql/types.ts:
+    plugins:
+      - "typescript"
+  src/graphql/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.tsx
+      baseTypesPath: types.ts
+    plugins:
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  src/graphql/ssr.generated.ts:
+    preset: import-types
+    presetConfig:
+      typesPath: "./types"
+    plugins:
+      - "typescript-operations"
+      - "typescript-graphql-request"
