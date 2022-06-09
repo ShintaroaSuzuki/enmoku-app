@@ -8,13 +8,15 @@ export type UniqueUserByIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type UniqueUserByIdQuery = { __typename?: 'Query', uniqueUser: { __typename?: 'User', id: string } };
+export type UniqueUserByIdQuery = { __typename?: 'Query', uniqueUser: { __typename?: 'User', id: string, name: string, avatar: string } };
 
 
 export const UniqueUserByIdDocument = gql`
     query uniqueUserById($id: ID!) {
   uniqueUser(id: $id) {
     id
+    name
+    avatar
   }
 }
     `;

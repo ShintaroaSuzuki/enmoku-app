@@ -23,6 +23,7 @@ export type Mutation = {
 
 
 export type MutationCreateUserArgs = {
+  avatar: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
 };
@@ -52,6 +53,7 @@ export type QueryUniqueUserArgs = {
 
 export type User = {
   __typename?: 'User';
+  avatar: Scalars['String'];
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];

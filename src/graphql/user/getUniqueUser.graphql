@@ -1,5 +1,7 @@
 query uniqueUserById($id: ID!) {
   uniqueUser(id: $id) {
     id
+    name
+    avatar
   }
 }

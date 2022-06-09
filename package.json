@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "graphql-codegen --require dotenv/config"
+    "codegen": "DOTENV_CONFIG_PATH='.env.local' graphql-codegen --require dotenv/config"
   },
   "dependencies": {
     "@apollo/client": "^3.6.6",
@@ -15,6 +15,7 @@
     "@types/next-auth": "^3.15.0",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
+    "iconsax-react": "^0.0.8",
     "jsonwebtoken": "^8.5.1",
     "next": "12.1.6",
     "next-auth": "^4.3.4",

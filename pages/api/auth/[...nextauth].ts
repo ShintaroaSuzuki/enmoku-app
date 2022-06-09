@@ -13,14 +13,6 @@ export default NextAuth({
     LineProvider({
       clientId: process.env.LINE_CLIENT_ID!,
       clientSecret: process.env.LINE_CLIENT_SECRET!,
-      profile(profile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-        };
-      },
     }),
   ],
   secret: process.env.SECRET,
@@ -34,11 +26,11 @@ export default NextAuth({
   },
   callbacks: {
     async signIn({ profile }) {
-      if (!process.env.GRAPHQL_ENDPOINT)
+      if (!process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT)
         throw new Error(
-          "enviornment variable is not defined: GRAPHQL_ENDPOINT"
+          "enviornment variable is not defined: NEXT_PUBLIC_GRAPHQL_ENDPOINT"
         );
-      const response = await fetch(process.env.GRAPHQL_ENDPOINT, {
+      const response = await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +48,7 @@ export default NextAuth({
       });
       const res = await response.json();
       if (!res.data) {
-        await fetch(process.env.GRAPHQL_ENDPOINT, {
+        await fetch(process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -65,7 +57,7 @@ export default NextAuth({
           body: JSON.stringify({
             query: `
               mutation {
-                createUser(id: "${profile.sub}", name: "${profile.name}") {
+                createUser(id: "${profile.sub}", name: "${profile.name}", avatar: "${profile.picture}") {
                   id
                 }
               }
@@ -74,6 +66,10 @@ export default NextAuth({
         });
       }
       return true;
+    },
+    async session({ session, token }) {
+      session.userId = token.sub;
+      return session;
     },
   },
 });
