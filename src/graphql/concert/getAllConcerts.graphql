@@ -1,0 +1,11 @@
+query concerts {
+  concerts {
+    id
+    title
+    date
+    notes {
+      id
+      body
+    }
+  }
+}

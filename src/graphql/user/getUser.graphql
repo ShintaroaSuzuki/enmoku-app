@@ -1,0 +1,12 @@
+query user($id: ID!) {
+  user(id: $id) {
+    id
+    name
+    avatar
+    concerts {
+      id
+      title
+      date
+    }
+  }
+}

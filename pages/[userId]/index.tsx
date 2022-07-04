@@ -1,6 +1,6 @@
 import useRequireAuth from "@/hooks/useRequireAuth";
 import Loader from "@/components/Loader";
-import { useUniqueUserByIdQuery } from "@/src/graphql/user/getUniqueUser.generated";
+import { useUserQuery } from "@/src/graphql/user/getUser.generated";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import NoDataContent from "@/components/app/NoDataContent";
@@ -11,14 +11,17 @@ const UserPage = () => {
   const router = useRouter();
   const { userId } = router.query;
 
-  const { loading, error, data } = useUniqueUserByIdQuery({
+  const { loading, error, data } = useUserQuery({
     variables: {
       id: userId as string,
     },
   });
 
   if (!session || loading) return <Loader />;
-  if (error) return <p>Error</p>;
+  if (error) {
+    console.log(error);
+    return <p>Error</p>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center gap-y-10 bg-slate-50">
@@ -31,10 +34,13 @@ const UserPage = () => {
         </button>
       </div>
       <div className="h-24 w-24 rounded-full overflow-hidden">
-        <img src={data?.uniqueUser.avatar} alt="profile" />
+        <img src={data?.user.avatar} alt="profile" />
       </div>
-      <p className="text-lg font-bold">{`ようこそ、${data?.uniqueUser.name} さん`}</p>
+      <p className="text-lg font-bold">{`ようこそ、${data?.user.name} さん`}</p>
       <NoDataContent userId={userId as string} />
+      {data?.user.concerts.map((concert) => (
+        <p>{concert.title}</p>
+      ))}
     </div>
   );
 };

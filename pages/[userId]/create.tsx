@@ -1,6 +1,8 @@
 import { useReducer, useState } from "react";
+import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowLeft, Send } from "iconsax-react";
+import { useCreateConcertMutation } from "@/src/graphql/concert/createConcert.generated";
 
 type SlideStateType = {
   page: number;
@@ -18,6 +20,10 @@ const CreateProgram = () => {
   const [title, dispatchTitle] = useReducer(reducer, initialTitleState);
   const [date, dispatchDate] = useReducer(reducer, initialDateState);
 
+  const router = useRouter();
+  let { userId } = router.query;
+  userId = String(userId);
+
   const slideContents = [
     { name: "タイトル", value: title, dispatch: dispatchTitle },
     { name: "日付", value: date, dispatch: dispatchDate },
@@ -34,8 +40,20 @@ const CreateProgram = () => {
     setSlideState({ page: slideState.page + direction, direction });
   };
 
-  const submit = () => {
-    console.log(title, date);
+  const [createConcert] = useCreateConcertMutation();
+
+  const submit = async () => {
+    const { errors, data } = await createConcert({
+      variables: {
+        title,
+        date,
+        userId,
+      },
+    });
+    if (errors) {
+      console.log(errors);
+    }
+    return data;
   };
 
   const isEnable = (value: string) => {

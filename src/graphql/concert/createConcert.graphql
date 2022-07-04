@@ -1,0 +1,7 @@
+mutation createConcert($title: String!, $date: DateTime!, $userId: String!) {
+  createConcert(title: $title, date: $date, userId: $userId) {
+    id
+    title
+    date
+  }
+}
