@@ -37,10 +37,15 @@ const UserPage = () => {
         <img src={data?.user.avatar} alt="profile" />
       </div>
       <p className="text-lg font-bold">{`ようこそ、${data?.user.name} さん`}</p>
-      <NoDataContent userId={userId as string} />
-      {data?.user.concerts.map((concert) => (
-        <p>{concert.title}</p>
-      ))}
+      {data ? (
+        data.user.concerts.length > 0 ? (
+          data.user.concerts!.map((concert) => <p>{concert.title}</p>)
+        ) : (
+          <NoDataContent userId={userId as string} />
+        )
+      ) : (
+        <NoDataContent userId={userId as string} />
+      )}
     </div>
   );
 };
